@@ -15,7 +15,7 @@ function [ Vt ] = Impulse(t,v)
     w = VariableAnnexe (z,t); % A créer encore
     S = Source(z,t);
 
-    Vt = D*Dlc + v*(v-1)*(mu-v) - w + S;
+    Vt = D*Dlc*Dlc + v*(v-1)*(mu-v) - w + S;
 
 end
     
