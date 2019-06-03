@@ -23,21 +23,24 @@
 ## Author: ThomasGPhonk <ThomasGPhonk@DESKTOP-7FS6V1P>
 ## Created: 2019-06-03
 
-function wret = VariableAnnexe (z,t);
+function wret = VariableAnnexe (z,t,v);
   
-global w;
-B1 = 0.008;
-B2 = 2.54*B1;
+global B1 B2 w;
 
-if t = 0:
-  w = 0;
+
+
+if t == 0
+  w = zeros (length(z),1);
+  wt = zeros (length(z),1);
 endif
 
-if t > 0:
-wt = B1*v - B2*w ; 
+
+if t > 0
+  wt = B1*v - B2*w ; 
 endif
 
-w = w + wt;
+wret = w + wt;
+w = wret;
 
 
 endfunction
