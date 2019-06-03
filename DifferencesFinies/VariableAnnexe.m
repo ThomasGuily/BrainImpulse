@@ -34,7 +34,7 @@ if t = 0:
 endif
 
 if t > 0:
-wt = B1v - B2w ; 
+wt = B1*v - B2*w ; 
 endif
 
 w = w + wt;

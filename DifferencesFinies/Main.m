@@ -20,8 +20,9 @@ pas=0.2;
 z0 = 0;
 zL = 50;
 pas2 = 0.1;
-z = z0:pas2:zL;
-
+n = 500;
+dz = (zL - z0)/(n - 1);
+z = z0:dz:zL; 
 t=0:pas:tmax;
 %D1u = five_point_biased_upwind_D1(z,1);
 D1c = three_point_centered_D1(z);
@@ -39,7 +40,7 @@ v0 = zeros (length(z));
 % Appel à la fonction ODE45
 
 
-options=odeset('RelTol',1e-3,'AbsTol',1e-3,'stats','on');
+options=odeset('RelTol',1e-5,'AbsTol',1e-5,'stats','on');
 [tout, yout] = ode45(@Impulse,t,v0,options);
 name='ODE 13tb';
 

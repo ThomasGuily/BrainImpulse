@@ -3,7 +3,7 @@ function [ Vt ] = Impulse(t,v)
 
     % Définitions des variables
 
-    global  z D S0 Dlc; %D1c D1u
+    global  z D D1c mu; %D1c D1u
 
     t
     

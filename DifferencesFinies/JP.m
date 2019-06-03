@@ -1,7 +1,7 @@
 
 function Jpattern = JP()
 
-    global D1c D1u n;
-    Jpattern = spones(D1u) + spones(D1c*D1c) + eye(n);
+    global D1c n;
+    Jpattern = spones(D1c*D1c) + eye(n);
 
 end
