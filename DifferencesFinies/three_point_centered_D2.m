@@ -1,10 +1,10 @@
-      function [D]=three_point_centered_D1(z)
+      function [D]=three_point_centered_D2(z)
 %...
 %...  The MatMol Group (2009)
 %...
-%...  function three_point_centered_D1 returns the differentiation matrix  
-%...  for computing the first derivative, xz, of a variable x over a nonuniform 
-%...  grid z from three-point, second-order finite difference approximations
+%...  function three_point_centered_D2 returns the differentiation matrix for  
+%...  computing the second derivative, xzz, of a variable x over a nonuniform grid z
+%...  from three-point, second-order finite difference approximations
 %...
 %...  the following parameters are used in the code:
 %...
@@ -20,7 +20,7 @@
 %...
 %...       m               highest derivative for which weights are sought
 %...
-      m=1;      
+      m=2;      
       ns=3;
 %...
 %...  sparse discretization matrix      

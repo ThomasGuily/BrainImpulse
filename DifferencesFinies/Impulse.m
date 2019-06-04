@@ -9,13 +9,16 @@ function [ Vt ] = Impulse(t,v)
     
     % Condition aux limites 
 
-    
+    v(1) = 0;
+    v (length (z)) = 0;
     
     % Dérivée temporelle
- 
+    
     w = VariableAnnexe (z,t,v); % A créer encore
+    
     S = Source(z,t);
-
-    Vt = D*D1c(1,:)*D1c(1,:)' + v*(v-1)'*(mu-v) - w + S;
+    
+    
+    Vt = D*D1c*z + v.*(v-1).*(mu-v) - w + S;
 
 end
