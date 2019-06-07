@@ -29,6 +29,12 @@ z = z';
 t=0:pas:tmax;
 t = t';
 
+%lagrange
+h=z(2)-z(1);
+D2L=lagrD2_1(h,n)
+D0L=lagrD0_1(h,n)
+ne=1;
+
 %D1u = five_point_biased_upwind_D1(z,1);
 D1c = three_point_centered_D2(z);
 
@@ -36,6 +42,15 @@ D1c = three_point_centered_D2(z);
 
 v0 = zeros (length(z),1);
 
+%parametres integration numerique
+
+nquad = 2;
+beta = .5./sqrt(1-(2*(1:nquad)).^(-2));
+T=diag(beta,1) + diag(beta,-1);
+[V,De]= eig(T);
+xquad=diag(De);
+[xquad,i] = sort(xquad);
+wquad = 2*V(1,i).^2;
 
 
 % Conditions régissant la valeur de la source en un point x
@@ -52,6 +67,11 @@ options=odeset('RelTol',1e-5,'AbsTol',1e-5,'stats','on');
 
 Visualizer(z,t,yout);
 
+%Lagrange 
+options2= odeset('Mass' ,masseL1(h,n,ne));
+[tout2,yout2] = ode15s(@inttemp ,t,v0,options2)
+
+%Visualizer(z,t,yout2)
 
 % Graphique
 %Visualizer(z,t,yout);
