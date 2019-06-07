@@ -38,8 +38,6 @@ D1c = three_point_centered_D2(z);
 v0 = zeros (length(z),1);
 
 
-n2 = 1000;
-
 
 % Conditions régissant la valeur de la source en un point x
 
