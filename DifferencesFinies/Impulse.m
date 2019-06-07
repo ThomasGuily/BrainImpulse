@@ -3,7 +3,7 @@ function [ Vt ] = Impulse(t,v)
 
     % Définitions des variables
 
-    global  i z D D1c mu w; %D1c D1u
+    global  i z D D1c mu w; 
 
     t
     
@@ -14,9 +14,10 @@ function [ Vt ] = Impulse(t,v)
     
     % Dérivée temporelle
     
-    w = VariableAnnexe (z,t,v); % A créer encore
+    w = VariableAnnexe (z,t,v); 
+
     
-    S = Source1(z,t);
+    S = Source(z,t);
     
 
     
