@@ -3,11 +3,11 @@ clear all
 
 % Lancement du chronomètre
 
-tic
+
 
 % Déclaration des variables
 
-global i B1 B2 D z0 zL n mu dz z D1c w; % D1u
+global i B1 B2 D z0 n2 zL n mu dz z D1c w; % D1u
 
 % Définition des paramètres
 
@@ -20,7 +20,7 @@ tmax= 200;
 pas=0.2;
 z0 = 0;
 zL = 50;
-n = 100;
+n = 101;
 B1 = 0.008;
 B2 = 2.54*B1;
 dz = (zL - z0)/(n - 1);
@@ -36,7 +36,7 @@ D1c = three_point_centered_D2(z);
 
 v0 = zeros (length(z),1);
 
-
+n2 = 1000;
 % Conditions régissant la valeur de la source en un point x
 
 
@@ -44,11 +44,12 @@ v0 = zeros (length(z),1);
 
 % Appel à la fonction ODE45
 
-
+tic
 options=odeset('RelTol',1e-5,'AbsTol',1e-5,'stats','on');
 [tout, yout] = ode45(@Impulse,t,v0,options);
 %name='ODE 45';
-
+tcpu=toc;
+tcpu
 % Graphique
 Visualizer(z,t,yout);
 %prism;
@@ -61,6 +62,5 @@ Visualizer(z,t,yout);
 
 % Arrêt et lecture du chronomètre
 
-tcpu=toc;
-tcpu
+
 
