@@ -1,0 +1,6 @@
+function M = masseL1(h,n,ne)
+M = diag(repmat(([2 repmat(4,1,n-2) 2]),1,ne),0) + ...
+    diag([repmat([ones(1,n-1) 0],1,ne-1) ones(1,n-1)],1) + ...
+    diag([repmat([ones(1,n-1) 0],1,ne-1) ones(1,n-1)],-1);
+
+M = (h/6)*sparse(M);
