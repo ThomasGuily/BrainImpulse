@@ -8,7 +8,7 @@ clear all
 % Déclaration des variables
 
 
-global i B1 B2 D z0 zL n mu dz z D1c w xquad wquad D2L D0L;
+global i B1 B2 D z0 zL n mu dz z D1c w;
 
 
 % Définition des paramètres
