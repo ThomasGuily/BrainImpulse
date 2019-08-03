@@ -8,9 +8,10 @@ clear all
 % Déclaration des variables
 
 
-global i B1 B2 D z0 zL n mu dz z D1c w;
+global i B1 B2 D z0 zL n mu dz z D1c;
 
 
+u = zeros (2,length (z));
 % Définition des paramètres
 
 D = 0.01;
@@ -22,7 +23,7 @@ tmax= 200;
 pas=0.2;
 z0 = 0;
 zL = 50;
-n = 1001;
+n = 401;
 B1 = 0.008;
 B2 = 2.54*B1;
 dz = (zL - z0)/(n - 1);
@@ -36,7 +37,8 @@ D1c = three_point_centered_D2(z);
 % Conditions initiales
 
 v0 = zeros (length(z),1);
-
+w0 = zeros (length(z),1);
+u0 = [v0;w0];
 
 
 % Conditions régissant la valeur de la source en un point x
@@ -48,9 +50,9 @@ v0 = zeros (length(z),1);
 
 tic
 options=odeset('RelTol',1e-5,'AbsTol',1e-5,'stats','on');
-[tout, yout] = ode45(@Impulse,t,v0,options);
+[tout, yout] = ode45(@Impulse,t,u0,options);
 %name='ODE 45';
-
+yout = yout (:,1 :length(z));
 % Arrêt et lecture du chronomètre
 
 tcpu=toc;

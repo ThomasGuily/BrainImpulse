@@ -5,8 +5,4 @@ function S = Source(z,t)
     if t <= 2
       S(floor(length(z)/2)+1)=0.15;
     endif
-    if t > 2
-      S(floor(length(z)/2)+1) = 0;
-    endif
-
 end
