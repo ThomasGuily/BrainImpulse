@@ -1,24 +1,38 @@
 
-function [ Vt ] = Impulse(t,v)
+function vt = Impulse (t,u)
 
-    % Définitions des variables
+global D  
+global D0 a0 D2
+global xquad wquad
+global ub
+t
 
-    global  z D D1c mu w S; %D1c D1u
+ub=u; %pour passer u aux fontions integrand
 
-    t
-    
-    % Condition aux limites 
+%partie lineaire
 
-    v(1) = 0;
-    v (length (z)) = 0;
-    
-    % Dérivée temporelle
-    
-    w = VariableAnnexe (z,t,v); % A créer encore
-    
-    S = Source(z,t);
-    
-    
-    Vt = D*D1c*z + v.*(v-1).*(mu-v) - w + S;
+  ut= a0.*D0*u + D*D2*u;
 
-end
+%partie non lineaire
+
+  %separation de u en v et w pour utiliser integrand1 et 2
+  y1= feval('integrand1' ,xquad')*wquad'
+  y2= feval('integrand2' ,xquad')*wquad';
+
+  y1=[y1 zeros(1,n)];
+  y2=[y2 zeros(1,n)];
+  %y1=[y1 zeros(n,1)];
+  %y2=[y2 zeros(n,1)];
+  
+  ut(1:2*n-1,1) = ut(1:2*n-1,1) - y1;
+  ut(2:2*n,1) = ut(2:2*n,1) - y2;
+  
+
+%conditions aux limites
+
+  ut(1,1) = ut(1,1) - u(1);
+  ut(2*n,1) = ut(2*n,1) - u(2*n);
+  
+
+  
+endfunction

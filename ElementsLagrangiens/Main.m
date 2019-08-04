@@ -5,44 +5,72 @@ clear all
 
 tic
 
-% Déclaration des variables
+% Déclaration des variables globales
 
-global i B1 B2 D z0 zL n mu dz z D1c w xquad wquad D2L D0L; % D1u
+global D B1 B2 mu         %constantes du probleme
+global z0 zL n dz z h     %grille spatiale
+global xquad wquad        %integration numerique
+global v0 w0 u0           %condition initiales
+global D0 a0 D2           %construction equation 
 
 % Définition des paramètres
 
-D = 0.01;
-mu =  0.08 ;
-
 % Grille spatiale
-i=0;
-tmax= 200;
-pas=0.2;
+
 z0 = 0;
 zL = 50;
 n = 1001;
+%nel = n-1;
+dz = (zL - z0)/(n - 1); %pas spatiale
+z = (z0:dz:zL)'; %vect colonne des coordonées
+%h= (z(2:n) - x(1:n-1))'; %vect des long des differents elements
+h= z(2)-z(1); %z equidistants=> 1 seule valeure de h
+
+%Matrices de différentiation
+
+D2= lagrD2_1(h,n);
+D0L=lagrD0_1(h,n);
+
+%constantes du probleme
+
+D = 0.01;
+mu =  0.08 ;
 B1 = 0.008;
 B2 = 2.54*B1;
-dz = (zL - z0)/(n - 1);
-z = z0:dz:zL; 
-z = z';
-t=0:pas:tmax;
-t = t';
+ne=2; %nombre d'eq aux der partielles
 
-%lagrange
-h=z(2)-z(1);
-D2L=lagrD2_1(h,n)
-D0L=lagrD0_1(h,n)
-ne=1;
+%matrices de differentiation
 
-%D1u = five_point_biased_upwind_D1(z,1);
-D1c = three_point_centered_D2(z);
+D00=lagrD0_1(h,n);
+D0=[D00 D00 ; D00 D00];
+D0=sparse(D0); 
+
+a= diag([repmat(-mu,1,n)],0) + diag([repmat(-mu,1,n-1)],1) + diag([repmat(-mu,1,n-1)],-1);
+b= diag([repmat(-1,1,n)],0) + diag([repmat(-1,1,n-1)],1) + diag([repmat(-1,1,n-1)],-1);
+c= diag([repmat(B1,1,n)],0) + diag([repmat(B1,1,n-1)],1) + diag([repmat(B1,1,n-1)],-1);
+d= diag([repmat(-B2,1,n)],0) + diag([repmat(-B2,1,n-1)],1) + diag([repmat(-B2,1,n-1)],-1);
+
+a0=[a b ; c d];
+a0=sparse(a0);
+
+D02=lagrD2_1(h,n);
+D2=[D02 zeros(n,n); zeros(n,2*n)];
+D2=sparse(D2);
 
 % Conditions initiales
 
-v0 = zeros (length(z),1);
+v0 = zeros (1,n);
+w0 = zeros (1,n);
+u0 =[v0;w0];
 
-%parametres integration numerique
+%instants de visualisation
+
+dt=0.2;
+tmax= 200;
+t=0:dt:tmax; %vect des instants de visualisation
+nt=length(t); %nombre d'instants de visualisation
+
+%parametres integration numérique
 
 nquad = 2;
 beta = .5./sqrt(1-(2*(1:nquad)).^(-2));
@@ -52,36 +80,14 @@ xquad=diag(De);
 [xquad,i] = sort(xquad);
 wquad = 2*V(1,i).^2;
 
+%integration temporelle
 
-% Conditions régissant la valeur de la source en un point x
+options= odeset('Mass' ,masseL1(h,n,ne));
+[tout,yout] = ode15s(@Impulse ,t,u0,options);
 
-
-
-
-% Appel à la fonction ODE45
-
-
-options=odeset('RelTol',1e-5,'AbsTol',1e-5,'stats','on');
-[tout, yout] = ode45(@Impulse,t,v0,options);
-%name='ODE 45';
+%affichage de la solution
 
 Visualizer(z,t,yout);
-
-%Lagrange 
-options2= odeset('Mass' ,masseL1(h,n,ne));
-[tout2,yout2] = ode15s(@inttemp ,t,v0,options2)
-
-%Visualizer(z,t,yout2)
-
-% Graphique
-%Visualizer(z,t,yout);
-%prism;
-%figure(1);
-%plot(z,yout(:,1:n));
-%xlabel('z');
-%ylabel('v(z,t)');
-%titre=['Propagation d’une impulsion électrique',name];
-%title(titre);
 
 % Arrêt et lecture du chronomètre
 
