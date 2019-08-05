@@ -11,7 +11,7 @@ function [ ut ] = Impulse(t, u)
     % Condition aux limites 
     
     
-    S = Source(z,t);
+    S = Source1(z,t);
     v = u(1:length (z))' ;
     w = u(length(z)+1:2*length(z))';
     
@@ -26,7 +26,7 @@ function [ ut ] = Impulse(t, u)
     
     
     %C = [(v.*(v-1).*(mu-v) - w + S)';(B1*v - B2*w)'] ;
-    vt = D*D1c*z + (v.*(v-1).*(mu-v))' + (- w + S')';
+    vt = D*D1c*z + (v.*(v-1).*(mu-v))' - w' + S;
     
     wt = (B1*v - B2*w)';
     ut = [vt;wt];
