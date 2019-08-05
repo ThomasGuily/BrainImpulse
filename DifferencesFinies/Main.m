@@ -8,7 +8,7 @@ clear all
 % Déclaration des variables
 
 
-global i B1 B2 D z0 zL n mu dz z D1c;
+global k i B1 B2 D z0 zL n mu dz z D1c;
 
 
 u = zeros (2,length (z));
@@ -16,6 +16,7 @@ u = zeros (2,length (z));
 
 D = 0.01;
 mu =  0.08 ;
+k = 3; 
 
 % Grille spatiale
 i=0;
@@ -23,7 +24,7 @@ tmax= 200;
 pas=0.2;
 z0 = 0;
 zL = 50;
-n = 401;
+n = 1001;
 B1 = 0.008;
 B2 = 2.54*B1;
 dz = (zL - z0)/(n - 1);
