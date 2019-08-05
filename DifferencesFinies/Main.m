@@ -24,7 +24,7 @@ tmax= 200;
 pas=0.2;
 z0 = 0;
 zL = 50;
-n = 1001;
+n = 201;
 B1 = 0.008;
 B2 = 2.54*B1;
 dz = (zL - z0)/(n - 1);
@@ -49,9 +49,11 @@ u0 = [v0;w0];
 
 % Appel à la fonction ODE45
 
+jpattern = sparse(spones([eye(n) + spones(D1c), eye(n); eye(n),  eye(n)]));
+options=odeset('RelTol',1e-5,'AbsTol',1e-5,'stats','on', 'jpattern', jpattern);
 tic
-options=odeset('RelTol',1e-5,'AbsTol',1e-5,'stats','on');
-[tout, yout] = ode45(@Impulse,t,u0,options);
+
+[tout, yout] = ode15s(@Impulse,t,u0,options);
 %name='ODE 45';
 yout = yout (:,1 :length(z));
 % Arrêt et lecture du chronomètre
