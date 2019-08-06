@@ -12,27 +12,22 @@ global z0 zL n dz z h     %grille spatiale
 global xquad wquad        %integration numerique
 global v0 w0 u0           %condition initiales
 global D0 a0 D2           %construction equation 
-
+global D00 D02 
+%global u1 u2 N1 N2 her S %h1 h2 h3 h4
 % Définition des paramètres
 
 % Grille spatiale
 
 z0 = 0;
 zL = 50;
-n = 1001;
+n = 201;
 %nel = n-1;
 dz = (zL - z0)/(n - 1); %pas spatiale
 z = (z0:dz:zL)'; %vect colonne des coordonées
 %h= (z(2:n) - x(1:n-1))'; %vect des long des differents elements
 h= z(2)-z(1); %z equidistants=> 1 seule valeure de h
 
-%Matrices de différentiation
-
-D2= lagrD2_1(h,n);
-D0L=lagrD0_1(h,n);
-
 %constantes du probleme
-
 D = 0.01;
 mu =  0.08 ;
 B1 = 0.008;
@@ -45,7 +40,7 @@ D00=lagrD0_1(h,n);
 D0=[D00 D00 ; D00 D00];
 D0=sparse(D0); 
 
-a= diag([repmat(-mu,1,n)],0) + diag([repmat(-mu,1,n-1)],1) + diag([repmat(-mu,1,n-1)],-1);
+a= diag([repmat(-mu,1,n)],0) + diag([repmat(-mu,1,n-1)],1) + diag([repmat(-mu,1,n-1)],-1); %matrice des coefficient de v dans la 1ere equation
 b= diag([repmat(-1,1,n)],0) + diag([repmat(-1,1,n-1)],1) + diag([repmat(-1,1,n-1)],-1);
 c= diag([repmat(B1,1,n)],0) + diag([repmat(B1,1,n-1)],1) + diag([repmat(B1,1,n-1)],-1);
 d= diag([repmat(-B2,1,n)],0) + diag([repmat(-B2,1,n-1)],1) + diag([repmat(-B2,1,n-1)],-1);
@@ -61,7 +56,8 @@ D2=sparse(D2);
 
 v0 = zeros (1,n);
 w0 = zeros (1,n);
-u0 =[v0;w0];
+u0 =[v0 w0];
+
 
 %instants de visualisation
 
@@ -84,6 +80,8 @@ wquad = 2*V(1,i).^2;
 
 options= odeset('Mass' ,masseL1(h,n,ne));
 [tout,yout] = ode15s(@Impulse ,t,u0,options);
+
+yout = yout (:,1 :length(z)); %eliminer les valeurs de w de la solution
 
 %affichage de la solution
 
