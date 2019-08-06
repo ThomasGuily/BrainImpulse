@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Main</title>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: { inlineMath: [['$','$'], ['\\(','\\)']] },
+  TeX: { equationNumbers: { autoNumber: 'all' } }
+});
+</script>
+<script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+<style>
+body > * {
+  max-width: 42em;
+}
+body {
+  font-family: "Roboto Condensed", sans-serif;
+  padding-left: 7.5em;
+  padding-right: 7.5em;
+}
+pre, code {
+  max-width: 50em;
+  font-family: monospace;
+}
+pre.oct-code {
+  border: 1px solid Grey;
+  padding: 5px;
+}
+pre.oct-code-output {
+  margin-left: 2em;
+}
+span.comment {
+  color: ForestGreen;
+}
+span.keyword {
+  color: Blue;
+}
+span.string {
+  color: DarkOrchid;
+}
+footer {
+  margin-top: 2em;
+  font-size: 80%;
+}
+a, a:visited {
+  color: Blue;
+}
+h2 {
+  font-family: "Roboto Condensed", serif;
+  margin-top: 1.5em;
+}
+h2 a, h2 a:visited {
+  color: Black;
+}
+</style>
+
+</head>
+<body>
+<h1>Main</h1>
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#node1">Declaration des variables</a></li>
+<li><a href="#node2">Definition des parametres</a></li>
+<li><a href="#node3">Creation de la grille spatio temporelle</a></li>
+<li><a href="#node4">Approximation de la derivee seconde</a></li>
+<li><a href="#node5">Conditions initiales (vecteur initial)</a></li>
+<li><a href="#node6">Initiation de Ode</a></li>
+<li><a href="#node7">Lancement du chronometre</a></li>
+<li><a href="#node8">Appel de Ode (Ode45 ici)</a></li>
+<li><a href="#node9">Receuil de v (on laisse tomber w)</a></li>
+<li><a href="#node10">Arret et lecture du chronometre</a></li>
+<li><a href="#node11">Visualisation graphique</a></li>
+</ul>
+
+<pre class="oct-code">close all
+clear all</pre>
+<h2><a id="node1">Declaration des variables</a></h2>
+<pre class="oct-code"><span class="keyword">global</span> z k B1 B2 D n mu D2 dz;</pre>
+<h2><a id="node2">Definition des parametres</a></h2>
+<pre class="oct-code">D = 0.01;
+mu =  0.08 ;
+k = 3;
+i=0;
+tmax= 200;
+pas=0.2;
+z0 = 0;
+zL = 50;
+n = 201;
+B1 = 0.008;
+B2 = 2.54*B1;</pre>
+<h2><a id="node3">Creation de la grille spatio temporelle</a></h2>
+<pre class="oct-code">dz = (zL - z0)/(n - 1);
+z = z0:dz:zL;
+z = z<span class="string">';</span>
+t=0:pas:tmax;
+t = t<span class="string">';</span></pre>
+<h2><a id="node4">Approximation de la derivee seconde</a></h2>
+<pre class="oct-code">D2 = three_point_centered_D2(z);</pre>
+<h2><a id="node5">Conditions initiales (vecteur initial)</a></h2>
+<pre class="oct-code">v0 = zeros (length(z),1);
+w0 = zeros (length(z),1);
+u0 = [v0;w0];</pre>
+<h2><a id="node6">Initiation de Ode</a></h2>
+<pre class="oct-code">options=odeset(<span class="string">'RelTol'</span>,1e-5,<span class="string">'AbsTol'</span>,1e-5,<span class="string">'stats'</span>,<span class="string">'on'</span>);</pre>
+<h2><a id="node7">Lancement du chronometre</a></h2>
+<pre class="oct-code">tic</pre>
+<h2><a id="node8">Appel de Ode (Ode45 ici)</a></h2>
+<pre class="oct-code">[tout, yout] = ode45(@Impulse,t,u0,options);</pre>
+
+<pre class="oct-code-output">error: v(0): subscripts must be either integers 1 to (2^63)-1 or logicals
+	in:
+
+[tout, yout] = ode45(@Impulse,t,u0,options);
+</pre>
+<h2><a id="node9">Receuil de v (on laisse tomber w)</a></h2>
+<pre class="oct-code">yout = yout (:,1 :length(z));</pre>
+
+<pre class="oct-code-output">error: 'yout' undefined near line 1 column 8
+	in:
+
+yout = yout (:,1 :length(z));
+</pre>
+<h2><a id="node10">Arret et lecture du chronometre</a></h2>
+<pre class="oct-code">tcpu=toc;
+tcpu</pre>
+
+<pre class="oct-code-output">tcpu =  0.12397
+</pre>
+<h2><a id="node11">Visualisation graphique</a></h2>
+<pre class="oct-code">Visualizer(z,t,yout);</pre>
+
+<pre class="oct-code-output">error: 'yout' undefined near line 1 column 16
+	in:
+
+Visualizer(z,t,yout);
+
+
+
+</pre>
+
+<footer>
+<hr>
+<a href="https://www.octave.org">Published with GNU Octave 5.1.0</a>
+</footer>
+<!--
+##### SOURCE BEGIN #####
+close all
+clear all
+
+
+%% Declaration des variables
+global z k B1 B2 D n mu D2 dz;
+
+
+%% Definition des parametres
+D = 0.01;
+mu =  0.08 ;
+k = 3;
+i=0;
+tmax= 200;
+pas=0.2;
+z0 = 0;
+zL = 50;
+n = 201;
+B1 = 0.008;
+B2 = 2.54*B1;
+
+%% Creation de la grille spatio temporelle
+dz = (zL - z0)/(n - 1);
+z = z0:dz:zL;
+z = z';
+t=0:pas:tmax;
+t = t';
+
+%% Approximation de la derivee seconde
+D2 = three_point_centered_D2(z);
+
+%% Conditions initiales (vecteur initial)
+v0 = zeros (length(z),1);
+w0 = zeros (length(z),1);
+u0 = [v0;w0];
+
+%% Initiation de Ode
+options=odeset('RelTol',1e-5,'AbsTol',1e-5,'stats','on');
+
+%% Lancement du chronometre
+tic
+
+%% Appel de Ode (Ode45 ici)
+[tout, yout] = ode45(@Impulse,t,u0,options);
+
+%% Receuil de v (on laisse tomber w)
+yout = yout (:,1 :length(z));
+
+%% Arret et lecture du chronometre
+tcpu=toc;
+tcpu
+
+%% Visualisation graphique
+Visualizer(z,t,yout);
+
+
+
+
+##### SOURCE END #####
+-->
+</body>
+</html>

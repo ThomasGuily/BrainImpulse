@@ -1,24 +1,15 @@
 close all
 clear all
 
-% Lancement du chronomètre
+
+%% Declaration des variables
+global z k B1 B2 D n mu D2 dz;
 
 
-
-% Déclaration des variables
-
-
-global k i B1 B2 D z0 zL n mu dz z D1c;
-
-
-u = zeros (2,length (z));
-% Définition des paramètres
-
+%% Definition des parametres
 D = 0.01;
 mu =  0.08 ;
 k = 3; 
-
-% Grille spatiale
 i=0;
 tmax= 200;
 pas=0.2;
@@ -27,42 +18,39 @@ zL = 50;
 n = 201;
 B1 = 0.008;
 B2 = 2.54*B1;
+
+%% Creation de la grille spatio temporelle
 dz = (zL - z0)/(n - 1);
 z = z0:dz:zL; 
 z = z';
 t=0:pas:tmax;
 t = t';
 
-D1c = three_point_centered_D2(z);
+%% Approximation de la derivee seconde
+D2 = three_point_centered_D2(z);
 
-% Conditions initiales
-
+%% Conditions initiales (vecteur initial)
 v0 = zeros (length(z),1);
 w0 = zeros (length(z),1);
 u0 = [v0;w0];
 
+%% Initiation de Ode
+options=odeset('RelTol',1e-5,'AbsTol',1e-5,'stats','on');
 
-% Conditions régissant la valeur de la source en un point x
-
-
-
-
-% Appel à la fonction ODE45
-
-jpattern = sparse(spones([eye(n) + spones(D1c), eye(n); eye(n),  eye(n)]));
-options=odeset('RelTol',1e-5,'AbsTol',1e-5,'stats','on', 'jpattern', jpattern);
+%% Lancement du chronometre
 tic
 
-[tout, yout] = ode15s(@Impulse,t,u0,options);
-%name='ODE 45';
-yout = yout (:,1 :length(z));
-% Arrêt et lecture du chronomètre
+%% Appel de Ode (Ode45 ici)
+[tout, yout] = ode45(@Impulse,t,u0,options);
 
+%% Receuil de v (on laisse tomber w)
+yout = yout (:,1 :length(z));
+
+%% Arret et lecture du chronometre
 tcpu=toc;
 tcpu
 
-% Graphique
-
+%% Visualisation graphique
 Visualizer(z,t,yout);
 
 
