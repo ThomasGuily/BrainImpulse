@@ -85,9 +85,11 @@ wquad = 2*V(1,i).^2;
 options= odeset('Mass' ,masseL1(h,n,ne));
 [tout,yout] = ode15s(@Impulse ,t,u0,options);
 
+yout = yout (:,1 :length(z)); %eliminer les valeurs de w de la solution
+
 %affichage de la solution
 
-Visualizer(z,t,yout(1:n));
+Visualizer(z,t,yout);
 
 % Arrêt et lecture du chronomètre
 
