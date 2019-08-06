@@ -1,9 +1,7 @@
 close all
 clear all
 
-% Lancement du chronomètre
 
-tic
 
 % Déclaration des variables globales
 
@@ -20,7 +18,7 @@ global D00 D02
 
 z0 = 0;
 zL = 50;
-n = 201;
+n = 101;
 %nel = n-1;
 dz = (zL - z0)/(n - 1); %pas spatiale
 z = (z0:dz:zL)'; %vect colonne des coordonées
@@ -79,7 +77,17 @@ wquad = 2*V(1,i).^2;
 %integration temporelle
 
 options= odeset('Mass' ,masseL1(h,n,ne));
+
+% Lancement du chronomètre
+
+tic
+
 [tout,yout] = ode15s(@Impulse ,t,u0,options);
+
+% Arrêt et lecture du chronomètre
+
+tcpu=toc;
+tcpu
 
 yout = yout (:,1 :length(z)); %eliminer les valeurs de w de la solution
 
@@ -87,8 +95,5 @@ yout = yout (:,1 :length(z)); %eliminer les valeurs de w de la solution
 
 Visualizer(z,t,yout);
 
-% Arrêt et lecture du chronomètre
 
-tcpu=toc;
-tcpu
 
