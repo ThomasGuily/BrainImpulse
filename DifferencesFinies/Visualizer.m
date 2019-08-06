@@ -24,28 +24,10 @@
 ## Created: 2019-06-04
 
 function  Visualizer(z,t,yout)
-clf;
-
-  %% Calculer les bornes du grid:
+  clf;
   
-  
-  %% Creer le grid avec la resolution desiree:
-  
-  
-  %% Calculer la valeur de la fonction 
-  %% en prennant compte seulement les deux premieres variables:
-  
-  
-  %% Afficher la trajectoire prise par l'algorithme:
-  %plot3(z, t, yout,'r');
-  %hold on;
-  %% Afficher des boules autour de chaque iteree:
-  %scatter3(z, t, yout,'k');
-  %hold on;
-  %hidden off;
-  %% Afficher la surface de la fonction:
-  
-  [xx, yy] = meshgrid (z,t); 
+  #Creation de la grille
+  #[xx, yy] = meshgrid (z,t); 
   mesh(z,t,yout);
   title ("Amplitude d'un signal à partir d'une impulsion d'amplitude 0.15 en z = 25 appliquée entre t=0 et t=2");
   xlabel "z (position)";
