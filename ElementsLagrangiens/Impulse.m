@@ -32,15 +32,17 @@ ub=u; %pour passer u aux fontions integrand
   %y2=[y2 zeros(n,1)];
   
   ut(1:n-1,1) = ut(1:n-1,1) + y1;
-  ut(2:n,1) = ut(2:n,1) + y2;
+  ut(2:n,1) = ut(2:n,1) + y2 ;
   ut(1:n,1) = ut(1:n,1)+S; 
   
 
 %conditions aux limites
 
-  ut(1,1) = ut(1,1) - u(1);
-  ut(n,1) = ut(n,1) - u(n);
-  ut(n+1,1) = ut(n+1,1) - u(n+1);
-  ut(2*n,1) = ut(2*n,1) - u(2*n);
+  %ut(1,1)
+  %u(1)
+  ut(1,1) = ut(1,1) - (u(1)-0);
+  ut(n,1) = ut(n,1) - (u(n)-0);
+  ut(n+1,1) = ut(n+1,1) - (u(n+1)-0);
+  ut(2*n,1) = ut(2*n,1) - (u(2*n)-0);
 
 endfunction
