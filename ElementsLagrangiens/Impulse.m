@@ -1,22 +1,26 @@
 
 function ut = Impulse (t,u)
 
-global D S n
-global D0 a0 D2
+global D S n mu B1 B2
+global D0 a0 D2 D00 D02
 global xquad wquad
 global ub z
 t
 
 
-ub=u; %pour passer u aux fontions integrand
+ub=u(1:n); %pour passer u aux fontions integrand
 
 %if (size(u)(1)==1)
  % u=u';
 %endif
 
+v= u(1:n);
+w= u(n+1:2*n);
+
 %partie lineaire
 
-  ut= a0.*D0*u + D*D2*u;
+  vt= - mu*D00*v - D00 * w + D*D02*v;
+  wt= B1*D00*v - B2*D00*w;
 
 %partie non lineaire
 
@@ -26,23 +30,19 @@ ub=u; %pour passer u aux fontions integrand
   y1= feval('integrand1' ,xquad')*wquad' ;
   y2= feval('integrand2' ,xquad')*wquad' ;
   
-  %y1=[y1 zeros(1,n)];
-  %y2=[y2 zeros(1,n)];
-  %y1=[y1 zeros(n,1)];
-  %y2=[y2 zeros(n,1)];
-  
-  ut(1:n-1,1) = ut(1:n-1,1) + y1;
-  ut(2:n,1) = ut(2:n,1) + y2 ;
-  ut(1:n,1) = ut(1:n,1)+S; 
+  vt(1:n-1)=vt(1:n-1)+y1;
+  vt(2:n)=vt(2:n)+y2;
+  vt=vt+S;
   
 
 %conditions aux limites
 
-  %ut(1,1)
-  %u(1)
-  ut(1,1) = ut(1,1) - (u(1)-0);
-  ut(n,1) = ut(n,1) - (u(n)-0);
-  ut(n+1,1) = ut(n+1,1) - (u(n+1)-0);
-  ut(2*n,1) = ut(2*n,1) - (u(2*n)-0);
+  vt(1)=vt(1)-v(1);
+  vt(n)=vt(n)-v(n);
+  wt(1)=wt(1)-w(1);
+  wt(n)=wt(n)-w(n);
+  
+  ut=[vt; wt];
+
 
 endfunction
