@@ -9,13 +9,12 @@ global z k B1 B2 D n mu D2 dz;
 %% Definition des parametres
 D = 0.01;
 mu =  0.08 ;
-k = 3; 
-i=0;
+k = 1; 
 tmax= 200;
 pas=0.2;
 z0 = 0;
 zL = 50;
-n = 201;
+n = 501;
 B1 = 0.008;
 B2 = 2.54*B1;
 
@@ -28,20 +27,23 @@ t = t';
 
 %% Approximation de la derivee seconde
 D2 = three_point_centered_D2(z);
-
+jpp = JP();
 %% Conditions initiales (vecteur initial)
 v0 = zeros (length(z),1);
 w0 = zeros (length(z),1);
 u0 = [v0;w0];
 
 %% Initiation de Ode
-options=odeset('RelTol',1e-5,'AbsTol',1e-5,'stats','on');
+
+options=odeset('RelTol',1e-3,'AbsTol',1e-3,'stats','on','JPattern',JP);
+
 
 %% Lancement du chronometre
 tic
 
 %% Appel de Ode (Ode45 ici)
-[tout, yout] = ode45(@Impulse,t,u0,options);
+[tout, yout] = ode15s(@Impulse,t,u0,options);
+
 
 %% Receuil de v (on laisse tomber w)
 yout = yout (:,1 :length(z));
