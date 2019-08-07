@@ -1,48 +1,35 @@
-
 function ut = Impulse (t,u)
 
-global D S n mu B1 B2
-global D0 a0 D2 D00 D02
-global xquad wquad
-global ub z
-t
+  % Déclaration des variables globales
+  global D S n mu B1 B2                      %constantes du probleme
+  global D0 D2                               %matrices de differentiation
+  global xquad wquad                         %parametres pour integration numérique
+  global v z                                 %variables necessaires dans les fonctions integrand
 
+  t                                          %affichage de l'instant au quel on calcule la reponse
 
-ub=u(1:n); %pour passer u aux fontions integrand
+  % Separation des inconnues et calcul de la source
+  v= u(1:n);
+  w= u(n+1:2*n);
+  S=Source1(z,t);
 
-%if (size(u)(1)==1)
- % u=u';
-%endif
+  % Partie lineaire des equations
+  vt= - mu*D0*v - D0 * w + D*D2*v;
+  wt= B1*D0*v - B2*D0*w;
 
-v= u(1:n);
-w= u(n+1:2*n);
-
-%partie lineaire
-
-  vt= - mu*D00*v - D00 * w + D*D02*v;
-  wt= B1*D00*v - B2*D00*w;
-
-%partie non lineaire
-
-  S=Source(z,t);
-  
-  %separation de u en v et w pour utiliser integrand1 et 2
+  % Partie non lineaire de la 1ere equation
   y1= feval('integrand1' ,xquad')*wquad' ;
   y2= feval('integrand2' ,xquad')*wquad' ;
-  
+
   vt(1:n-1)=vt(1:n-1)+y1;
   vt(2:n)=vt(2:n)+y2;
-  vt=vt+S;
   
-
-%conditions aux limites
-
+  %Implementation des conditions aux limites
   vt(1)=vt(1)-v(1);
   vt(n)=vt(n)-v(n);
   wt(1)=wt(1)-w(1);
   wt(n)=wt(n)-w(n);
   
   ut=[vt; wt];
-
 
 endfunction
