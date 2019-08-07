@@ -6,6 +6,8 @@ function [ ut ] = Impulse(t, u)
     
     %% Calcul du terme source
     S = Source(z,t);
+    #S = Source1(z,t);
+    #S = Source2(z,t);
     
     %% Separation du vecteur initiale en v et w
     v = u(1:length (z))' ;

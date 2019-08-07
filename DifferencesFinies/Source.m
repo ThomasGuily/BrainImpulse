@@ -1,6 +1,6 @@
 function S = Source(z,t)
   
-    %% Initialaisation du vecteur source
+    %% Initialisation du vecteur source
     S = zeros(length(z),1);
     
     %% Terme source initial, source ponctuelle
