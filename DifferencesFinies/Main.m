@@ -14,7 +14,7 @@ tmax= 200;
 pas=0.2;
 z0 = 0;
 zL = 50;
-n = 501;
+n = 1501;
 B1 = 0.008;
 B2 = 2.54*B1;
 
@@ -27,7 +27,7 @@ t = t';
 
 %% Approximation de la derivee seconde
 D2 = three_point_centered_D2(z);
-jpp = JP();
+
 %% Conditions initiales (vecteur initial)
 v0 = zeros (length(z),1);
 w0 = zeros (length(z),1);
@@ -35,7 +35,7 @@ u0 = [v0;w0];
 
 %% Initiation de Ode
 
-options=odeset('RelTol',1e-3,'AbsTol',1e-3,'stats','on','JPattern',JP);
+options=odeset('RelTol',1e-5,'AbsTol',1e-5,'stats','on','jpattern', sparse (spones([eye(n) + spones(D2), eye(n); eye(n),  eye(n)])));
 
 
 %% Lancement du chronometre

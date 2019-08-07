@@ -1,9 +1,9 @@
 
 function Jpattern = JP()
 
-    global D2 n;
+    global B1 B2 D2 n;
     
     %% Definition de la Jacobienne pour option Jpattern
-    Jpattern = sparse(spones([eye(n) + spones(D2), eye(n); eye(n),  eye(n)]));
+    Jpattern = spones([eye(n) + D2, eye(n); eye(n),  eye(n)]);
 
 end
