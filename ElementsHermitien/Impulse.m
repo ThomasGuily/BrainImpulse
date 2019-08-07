@@ -1,39 +1,42 @@
+function ut = Impulse (t,u)
 
-function vt = Impulse (t,u)
+  % Déclaration des variables globales
+  global D S n mu B1 B2                      %constantes du probleme
+  global D0 D2                               %matrices de differentiation
+  global xquad wquad                         %parametres pour integration numérique
+  global v z                                 %variables necessaires dans les fonctions integrand
 
-global D  
-global D0 a0 D2
-global xquad wquad
-global ub
-t
+  t                                          %affichage de l'instant au quel on calcule la reponse
 
-ub=u; %pour passer u aux fontions integrand
+  % Separation des inconnues et calcul de la source
+  v= u(1:2*n);
+  w= u(2*n+1:4*n);
+  S1=Source(z,t);
+  S(1:2:2*n-1)=S1;
+  S(2:2:2*n)=S1;
+  % Partie lineaire des equations
+  vt= - mu*D0*v - D0 * w + D*D2*v;
+  wt= B1*D0*v - B2*D0*w;
 
-%partie lineaire
-
-  ut= a0.*D0*u + D*D2*u;
-
-%partie non lineaire
-
-  %separation de u en v et w pour utiliser integrand1 et 2
-  y1= feval('integrand1' ,xquad')*wquad'
-  y2= feval('integrand2' ,xquad')*wquad';
-  y3=feval('integrand3' ,xquad')*wquad';
-  y4=feval('integrand4' ,xquad')*wquad';
-  y1=[y1 zeros(1,n)];
-  y2=[y2 zeros(1,n)];
-  y3=[y3 zeros(1,n)];
-  y4=[y4 zeros(1,n)];
-  %y1=[y1 zeros(n,1)];
-  %y2=[y2 zeros(n,1)];
+  % Partie non lineaire de la 1ere equation
+  y1= feval('integrand1' ,xquad')*wquad' ;
+  y2= feval('integrand2' ,xquad')*wquad' ;
+  y3= feval('integrand3' ,xquad')*wquad' ;
+  y4= feval('integrand4' ,xquad')*wquad' ;
   
-  ut(1:2*n-1,1) = ut(1:2*n-1,1) - y1;
-  ut(2:2*n,1) = ut(2:2*n,1) - y2;
-%conditions aux limites
-
-  ut(1,1) = ut(1,1) - u(1);
-  ut(2*n,1) = ut(2*n,1) - u(2*n);
+  %vt(1:n-1)=vt(1:n-1)+y1;
+  %vt(2:n)=vt(2:n)+y2;
+  vt(1:2:2*n-3)=vt(1:2:2*n-3) + y1;
+  vt(2:2:2*n-2)=vt(2:2:2*n-2) + y2;
+  vt(3:2:2*n-1)=vt(3:2:2*n-1) + y3;
+  vt(4:2:2*n)=vt(4:2:2*n) + y4;
   
-
+  %Implementation des conditions aux limites
+  vt(1)=vt(1)-v(1);
+  vt(2*n-1)=vt(2*n-1)-v(2*n-1);
+  wt(1)=wt(1)-w(1);
+  wt(2*n-1)=wt(2*n-1)-w(2*n-1);
   
+  ut=[vt; wt];
+
 endfunction
