@@ -64,7 +64,7 @@ tic
 %integration temporelle
 options= odeset('Mass' ,masseH1(h,n,ne)); %changer masse pour Hermite
 [tout,yout] = ode15s(@Impulse ,t,u0,options);
-yout = yout (:,1 :length(z));             %eliminer les valeurs de w de la solution
+yout = yout (:,1:2:2*length(z));          %eliminer les valeurs de w et vx de la solution
 
 % Arrêt et lecture du chronomètre
 tcpu=toc;

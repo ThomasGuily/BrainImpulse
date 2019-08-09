@@ -11,7 +11,7 @@ function ut = Impulse (t,u)
   % Separation des inconnues et calcul de la source
   v= u(1:2*n);
   w= u(2*n+1:4*n);
-  S1=Source(z,t);
+  S1=Source1(z,t);
   S(1:2:2*n-1)=S1;
   S(2:2:2*n)=S1;
   % Partie lineaire des equations
