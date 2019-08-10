@@ -2,7 +2,7 @@ close all
 clear all
 
 % Déclaration des variables globales
-global D B1 B2 mu                       %constantes du probleme
+global D B1 B2 mu k                     %constantes du probleme
 global z0 zL n dz z h                   %grille spatiale
 global xquad wquad                      %integration numerique
 global v0 w0 u0                         %condition initiales
@@ -20,6 +20,7 @@ h= z(2)-z(1);                           %z equidistants=> 1 seule valeure de h
 %constantes du probleme
 D = 0.01;
 mu =  0.08 ;
+k=3;
 B1 = 0.008;
 B2 = 2.54*B1;
 ne=2;                                   %nombre d'eq aux der partielles
