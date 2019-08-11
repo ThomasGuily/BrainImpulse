@@ -6,5 +6,5 @@ function S = Source(z,t)
     %% Terme source initial, source ponctuelle
     if t <= 2
       S(floor(length(z)/2)+1)=0.15;
-    endif
+    end
 end

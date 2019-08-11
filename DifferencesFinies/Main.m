@@ -26,9 +26,9 @@ t=0:pas:tmax;
 t = t';
 
 %% Approximation de la derivee seconde
-#D2 = three_point_centered_D2(z);
-#D2 = five_point_centered_D2(z);
-#D2 = seven_point_centered_D2(z);
+%D2 = three_point_centered_D2(z);
+%D2 = five_point_centered_D2(z);
+%D2 = seven_point_centered_D2(z);
 D2 = nine_point_centered_D2(z);
 
 %% Conditions initiales (vecteur initial)
@@ -38,7 +38,7 @@ u0 = [v0;w0];
 
 %% Initiation de Ode
 
-#options=odeset('RelTol',1e-5,'AbsTol',1e-5,'stats','on','jpattern', sparse (spones([eye(n) + spones(D2), eye(n); eye(n),  eye(n)])));
+%options=odeset('RelTol',1e-5,'AbsTol',1e-5,'stats','on','jpattern', sparse (spones([eye(n) + spones(D2), eye(n); eye(n),  eye(n)])));
 options=odeset('RelTol',1e-5,'AbsTol',1e-5,'stats','on');
 
 %% Lancement du chronometre

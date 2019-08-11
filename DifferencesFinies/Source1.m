@@ -8,5 +8,5 @@ function S = Source1(z,t)
     %% Deuxième terme source, source ponctuelle amelioree
     if t <= 2
       S(floor(length(z)/2)+1)= (0.15/dz) ;
-    endif
+    end
 end
